@@ -1,0 +1,24 @@
+{
+  "name": "blockchain-wallet-sdk",
+  "version": "1.0.0",
+  "description": "This is lib for famous public chain to create their wallet",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guoshijiang/blockchain-wallet-sdk.git"
+  },
+  "keywords": [
+    "blockchain",
+    "wallet",
+    "sdk"
+  ],
+  "author": "Shijiang Guo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/guoshijiang/blockchain-wallet-sdk/issues"
+  },
+  "homepage": "https://github.com/guoshijiang/blockchain-wallet-sdk#readme"
+}
