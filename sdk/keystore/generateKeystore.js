@@ -41,7 +41,7 @@ libKeystore.createKeystore = function (password) {
 
 /**
  * @param keyObject
- * @param path (if your path is null, export keystore by default way; if path has value, export keystore by your way)
+ * @param path if your path is null, export keystore by default way; if path has value, export keystore by your way
  * @returns {{code: number, message: string}}
  */
 libKeystore.exportKeystore = function(keyObject, path) {
@@ -51,27 +51,75 @@ libKeystore.exportKeystore = function(keyObject, path) {
     if(!path){
         keythereum.exportToFile(keyObject);
     } else {
-        fs.writeFile(path + '/'+ 'privateKeyOrKeystore.ert', keyObject, {flag:'w',encoding:'utf-8',mode:'0666'}, function(err) {
+        var json = JSON.stringify(keyObject);
+        var outfile = keythereum.generateKeystoreFilename(keyObject.address);
+        var outpath = path + "/" + outfile;
+        console.log(outpath);
+        fs.writeFile(outpath, json, function (err) {
             if (err) {
-                console.log("write private key to file fail")
-
-            } else {
-                console.log("write private key to file success");
+                return err;
+            } else{
+                outpath;
             }
-        })
+        });
     }
 }
 
-libKeystore.importKeystore = function() {
-
+/**
+ * @param address
+ * @param datadir
+ * @returns {*}
+ */
+libKeystore.importKeystore = function(address, datadir) {
+    if(!address || !datadir) {
+        return paramsErr;
+    }
+    return keythereum.importFromFile(address, datadir);
 }
 
-libKeystore.exportPrivateKey = function() {
-
+/**
+ * @param keyObject
+ * @param password
+ * @returns {*}
+ */
+libKeystore.exportPrivateKey = function(keyObject, password) {
+    if(!keyObject || !password) {
+        return paramsErr;
+    }
+    return keythereum.recover(password, keyObject);
 }
 
-libKeystore.importPrivateKey = function() {
-
+/**
+ * @param privateKey
+ * @param password
+ * @returns {*}
+ */
+libKeystore.importPrivateKey = function(privateKey ,password) {
+    if(!password || privateKey) {
+        return paramsErr;
+    }
+    var keystore = '';
+    var params = { keyBytes: 32, ivBytes: 16 };
+    var dk = keythereum.create(params);
+    var kdf = "pbkdf2";
+    var options = {
+        kdf: "pbkdf2",
+        cipher: "aes-128-ctr",
+        kdfparams: {
+            c: 262144,
+            dklen: 32,
+            prf: "hmac-sha256"
+        }
+    };
+    var dk = keythereum.create(params)
+    if (!dk) {
+        return createDkErr;
+    }
+    keystore = keythereum.dump(password, privateKey, dk.salt, dk.iv, options);
+    if(!keystore) {
+        return createKeystoreErr;
+    }
+    return keystore;
 }
 
 module.exports = libKeystore;
