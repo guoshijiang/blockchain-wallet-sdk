@@ -78,8 +78,16 @@
 
       var addr = address.blockchainAddress(addressParmas);
       console.log(addr);
-      
-上述代码中参数seed是随机数种子，这里需要传入的是一个Buffer流；coinType是要生成地址的币的类别，目前支持三种传参方式：BTC，ETH和ERC20;number是要生成第几个地址，0默认是第一个；bipNumber是该要生成地址的币在BIP44协议中的规范数字；receiveOrChange是比特币地址生成专用参数，0代表普通地址，1代表找零地址；coinMark是币的标识，例如bitcoin的标识是BTC，ethereum的标识是ETH。
+
+下面是生成效果：
+
+      { 
+        coinMark: 'BTC',
+        privateKey: 'L3LK2uQQZCj7x7SzGSyRbiP8RwrYpGFPw7qbjuMKNfz83edmMJG3',
+        address: '1AtMVGqbVSZDc4p5H414Q8zKqXMoYv7zxs' 
+      }
+
+上述代码中参数`seed`是随机数种子，这里需要传入的是一个`Buffer`流；`coinType`是要生成地址的币的类别，目前支持三种传参方式：`BTC`，`ETH`和`ERC20`;`number`是要生成第几个地址，`0`默认是第一个；`bipNumber`是该要生成地址的币在`BIP44`协议中的规范数字；`receiveOrChange`是比特币地址生成专用参数，`0`代表普通地址，`1`代表找零地址；`coinMark`是币的标识，例如`bitcoin`的标识是`BTC`，`ethereum`的标识是`ETH`。
 
 ### 2.生成以太坊地址
 
@@ -101,12 +109,23 @@
 
       var addr = address.blockchainAddress(addressParmas);
       console.log(addr);
+      
+生成效果
+
+      { 
+            coinMark: 'ETH',
+            privateKey: '612c02325cbf84cd4ad3dac8ae107e2bf37f98834b23f6f6208547f1a179d852',
+            address: '0x947ee95a84f9bdf00dbc600961a737cb92fca5f4' 
+      }
 
 仔细观看不难看出，上面地址生成中，主要是参数改变了
 
 ### 3.生成单个ERC20地址
 
 下面是生成ERC20地址的代码，参数如上
+
+      var mnemonicS = require("../sdk/mnemonic/generateWord");
+      var address = require("../sdk/address/generateAddress");
 
       var mnemonic= mnemonicS.createHelpWord(12, 'english');
       var seed = mnemonicS.mnemonicToSeed(mnemonic);
@@ -122,7 +141,16 @@
       var addr = address.blockchainAddress(addressParmas);
       console.log(addr);
 
+
 也只是传入参数发生变化
+
+生成效果：
+
+      { 
+            coinMark: 'LET',
+            privateKey: '0bdf145ae58a71c0da7fc3cf5510de5909d1314722f8d90c6b9ee543e431f1c7',
+            address: '0x7d0c60a5ef87ed7f43fcad648911327c1f474623' 
+      }
 
 ### 4.批量生成ERC20地址
 
