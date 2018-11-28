@@ -13,6 +13,10 @@ const inputParamErr = {code:1001, message:"input receiveOrChange param is error,
 const childKeyErr = {code:1002, message:"input param childKey is null"};
 const unknownType = {code:1003, message:"unknown type,please input once again"};
 
+/**
+ * @param childKey
+ * @returns {*}
+ */
 function getAddress (childKey) {
     if(!childKey){
        console.log("input param childKey is null");
@@ -21,6 +25,12 @@ function getAddress (childKey) {
     return baddress.toBase58Check(bcrypto.hash160(childKey.publicKey), NETWORKS.bitcoin.pubKeyHash)
 }
 
+/**
+ * @param seed
+ * @param receiveOrChange
+ * @param number
+ * @returns {*}
+ */
 function bitcoinAddress(seed, receiveOrChange, number) {
     if(!seed || !receiveOrChange || !number) {
         console.log("input params seed, receiveOrChange and number is null");
@@ -39,6 +49,11 @@ function bitcoinAddress(seed, receiveOrChange, number) {
     return btcData;
 }
 
+/**
+ * @param seed
+ * @param number
+ * @returns {*}
+ */
 function ethreumAddress(seed, number) {
     if(!seed || !number) {
         console.log("input param seed and number is null")
@@ -52,6 +67,13 @@ function ethreumAddress(seed, number) {
     return ethData;
 }
 
+/**
+ * @param seed
+ * @param bipNumber
+ * @param number
+ * @param coinMark
+ * @returns {*}
+ */
 function erc20Address(seed, bipNumber, number, coinMark) {
     if(!seed || !number) {
         console.log("input param seed, coinNumber and number is null")
@@ -65,6 +87,10 @@ function erc20Address(seed, bipNumber, number, coinMark) {
     return erc20Data;
 }
 
+/**
+ * @param addressParmas
+ * @returns {*}
+ */
 libGenerateAddress.blockchainAddress = function (addressParmas) {
     if(!addressParmas) {
         console.log("input param addressParmas is null")
@@ -83,6 +109,10 @@ libGenerateAddress.blockchainAddress = function (addressParmas) {
     }
 };
 
+/**
+ * @param ERC20AddressParam
+ * @returns {*}
+ */
 libGenerateAddress.multiERC20AddressGenerate = function(ERC20AddressParam) {
     if(!ERC20AddressParam) {
         console.log("input param ERC20AddressParam is null");

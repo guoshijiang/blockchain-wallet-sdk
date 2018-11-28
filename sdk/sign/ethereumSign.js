@@ -1,26 +1,34 @@
 const util = require('ethereumjs-util');
 const transaction = require('ethereumjs-tx');
+const Web3 = require('web3');
 
-var ethOrErc20Sign = {};
+var libEthereumSign = {};
+
+const paramsErr = {code:1000, message:"input params is null"};
+var serializedErr = {code:400, message:"Serialized transaction fail"};
+
+if (typeof web3 !== 'undefined') {
+    var web3 = new Web3(web3.currentProvider);
+} else {
+    var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+}
 
 /**
  * @param privateKey
  * @param nonce
  * @param toAddress
- * @param sendAmount
+ * @param sendToBalance
  * @param gasPrice
  * @param gasLimit
  * @returns {*}
  */
-ethOrErc20Sign.ethereumSign = function (privateKey, nonce, toAddress, sendAmount, gasPrice, gasLimit) {
-    var errData = {code:400, message:"param is null"};
-    var serializedErr = {code:400, message:"Serialized transaction fail"};
-    if(!privateKey || !nonce || !toAddress || !sendAmount || !gasPrice || !gasLimit) {
+libEthereumSign.ethereumSign = function (privateKey, nonce, toAddress, sendToBalance, gasPrice, gasLimit) {
+    if(!privateKey || !nonce || !toAddress || !sendToBalance || !gasPrice || !gasLimit) {
         console.log("one of fromAddress, toAddress, sendToBalance, sendFee is null, please give a valid param");
-        return errData;
+        return paramsErr;
     } else {
         var transactionNonce = parseInt(nonce).toString(16);
-        var numBalance = parseFloat(sendAmount);
+        var numBalance = parseFloat(sendToBalance);
         var balancetoWei = web3.toWei(numBalance, "ether");
         var oxNumBalance = parseInt(balancetoWei).toString(16);
         var gasPriceHex = parseInt(gasPrice).toString(16);
@@ -33,7 +41,6 @@ ethOrErc20Sign.ethereumSign = function (privateKey, nonce, toAddress, sendAmount
             to:toAddress,
             value:'0x' + oxNumBalance,
         };
-        alert(JSON.stringify(rawTx));
         var tx = new transaction(rawTx);
         tx.sign(privateKeyBuffer);
         var serializedTx = tx.serialize();
@@ -48,49 +55,50 @@ ethOrErc20Sign.ethereumSign = function (privateKey, nonce, toAddress, sendAmount
         }
     }
     return '0x' + serializedTx.toString('hex');
-}
+};
 
 /**
- * @param privateKey
- * @param nonce
- * @param currentAccount
- * @param contractAddress
- * @param toAddress
- * @param gasPrice
- * @param gasLimit
- * @param totalAmount
- * @param decimal
+ * @param sendData
  * @returns {*}
- * @constructor
  */
-ethOrErc20Sign.Erc20CoinSign = function(privateKey, nonce, currentAccount,  contractAddress, toAddress,  gasPrice,  gasLimit, totalAmount , decimal) {
-    if(!privateKey || !nonce || !currentAccount || !contractAddress || !toAddress  || !gasPrice || !gasLimit || !totalAmount || !decimal) {
-        console.log("one of param is null, please give a valid param");
-        var errData = {msgCode:3000, Message:"one of param is null, please give a valid param"};
-        return errData;
+libEthereumSign.ethereumMultiSign = function (sendData) {
+    if(sendData == null) {
+        console.log("param is invalid, sendData is null");
+        return paramsErr;
     }
-    var transactionNonce = parseInt(nonce).toString(16);
-    console.log("transaction nonce is " + transactionNonce);
-    var gasLimits = parseInt(60000).toString(16);
-    console.log("send transaction gasLimit is " + gasLimit);
-    var gasPrices = parseFloat(gasPrice).toString(16);
-    console.log("send transaction gasPrice is " + gasPrice);
-    var txboPrice = parseFloat(totalAmount*(10**decimal)).toString(16)
-    var txData = {
-        nonce: '0x'+ transactionNonce,
-        gasLimit: '0x' + gasLimits,
-        gasPrice: '0x' +gasPrices,
-        to: contractAddress,
-        from: currentAccount,
-        value: '0x00',
-        data: '0x' + 'a9059cbb' + addPreZero(toAddress.substr(2)) + addPreZero(txboPrice)
+    var calcNonce = Number(sendData.nonce);
+    var arrData = sendData.signDta;
+    var outArr = [];
+    for(var i = 0; i < arrData.length; i++){
+        var transactionNonce = parseInt(calcNonce).toString(16);
+        var balancetoWei = web3.toWei(parseFloat(sendData.signDta[i].totalAmount), "ether");
+        var balanceValue = parseInt(balancetoWei).toString(16);
+        var oxGas = parseInt(sendData.gasLimit).toString(16);
+        var oxGasPrice = parseInt(sendData.gasPrice).toString(16);
+        var privateKeyBuffer =  Buffer.from(sendData.privateKey, 'hex');
+        var rawTx = {
+            nonce:'0x' + transactionNonce,
+            gasPrice: '0x' + oxGasPrice,
+            gas:'0x' + oxGas,
+            to: sendData.signDta[i].toAddress,
+            value:'0x' + balanceValue
+        };
+        var tx = new transaction(rawTx);
+        tx.sign(privateKeyBuffer);
+        var serializedTx = tx.serialize();
+        if(serializedTx == null) {
+            console.log("Serialized transaction fail")
+        } else {
+            outArr = outArr.concat('0x' + serializedTx.toString('hex'))
+            if (tx.verifySignature()) {
+                console.log('Signature Checks out!')
+            } else {
+                console.log("Signature checks fail")
+            }
+        }
+        calcNonce = calcNonce + 1;
     }
-    var tx = new transaction(txData);
-    const privateKey1 = new Buffer(privateKey, 'hex');
-    tx.sign(privateKey1);
-    var serializedTx = tx.serialize().toString('hex');
-    console.log("transaction sign result is " + serializedTx);
-    return '0x'+serializedTx;
-}
+    return { signCoin:"ETH", signDataArr:outArr}
+};
 
-module.exports = ethOrErc20Sign;
+module.exports = libEthereumSign;
