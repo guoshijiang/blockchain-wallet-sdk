@@ -54,4 +54,125 @@
     var bool = testWord.validateMnemonic(words, 'japanese');
     console.log(bool)  // 返回true表示验证成功
     
-    
+## 二.生成地址
+
+目前该库支持以太坊，ERC20和比特币地址和私钥生成
+
+### 1.生成BTC地址
+
+下面代码是生成比特地址的代码
+
+      var mnemonicS = require("../sdk/mnemonic/generateWord");
+      var address = require("../sdk/address/generateAddress");
+
+      var mnemonic= mnemonicS.createHelpWord(12, 'english');
+      var seed = mnemonicS.mnemonicToSeed(mnemonic);
+      var addressParmas = {
+          "seed":seed,
+          "coinType":"BTC",
+          "number":"12",
+          "bipNumber":"0",
+          "receiveOrChange":"1",
+          "coinMark":"BTC"
+      }
+
+      var addr = address.blockchainAddress(addressParmas);
+      console.log(addr);
+      
+上述代码中参数seed是随机数种子，这里需要传入的是一个Buffer流；coinType是要生成地址的币的类别，目前支持三种传参方式：BTC，ETH和ERC20;number是要生成第几个地址，0默认是第一个；bipNumber是该要生成地址的币在BIP44协议中的规范数字；receiveOrChange是比特币地址生成专用参数，0代表普通地址，1代表找零地址；coinMark是币的标识，例如bitcoin的标识是BTC，ethereum的标识是ETH。
+
+### 2.生成以太坊地址
+
+下面是生成以太坊地址的代码，参数如上
+
+      var mnemonicS = require("../sdk/mnemonic/generateWord");
+      var address = require("../sdk/address/generateAddress");
+
+      var mnemonic= mnemonicS.createHelpWord(12, 'english');
+      var seed = mnemonicS.mnemonicToSeed(mnemonic);
+      var addressParmas = {
+          "seed":seed,
+          "coinType":"ETH",
+          "number":"0",
+          "bipNumber":"60",
+          "receiveOrChange":"1",
+          "coinMark":"ETH"
+      }
+
+      var addr = address.blockchainAddress(addressParmas);
+      console.log(addr);
+
+仔细观看不难看出，上面地址生成中，主要是参数改变了
+
+### 3.生成单个ERC20地址
+
+下面是生成ERC20地址的代码，参数如上
+
+      var mnemonic= mnemonicS.createHelpWord(12, 'english');
+      var seed = mnemonicS.mnemonicToSeed(mnemonic);
+      var addressParmas = {
+          "seed":seed,
+          "coinType":"ERC20",
+          "number":"0",
+          "bipNumber":"518",
+          "receiveOrChange":"1",
+          "coinMark":"LET"
+      }
+
+      var addr = address.blockchainAddress(addressParmas);
+      console.log(addr);
+
+也只是传入参数发生变化
+
+### 4.批量生成ERC20地址
+
+      var mnemonicS = require("../sdk/mnemonic/generateWord");
+      var address = require("../sdk/address/generateAddress");
+
+      var mnemonic= mnemonicS.createHelpWord(12, 'english');
+      var seed = mnemonicS.mnemonicToSeed(mnemonic);
+
+      var ERC20AddressParam = {
+          "seed":seed,
+          "erc20":[
+              {
+                  "coinMark":"LET",
+                  "bipNumber":"618",
+                  "number":"0"
+              },{
+                  "coinMark":"SSP",
+                  "bipNumber":"518",
+                  "number":"0"
+              },{
+                  "coinMark":"Kcash",
+                  "bipNumber":"128",
+                  "number":"0"
+              }
+          ]
+      }
+
+      var addre= address.multiERC20AddressGenerate(ERC20AddressParam);
+      console.log(addre);
+      
+如下是生成的效果
+
+      [ 
+            {
+                  coinMark: 'LET',
+                  privateKey: '164a6167e4c50e24ad6a74fd1cab6521e3a1472a70d67c88146a1952b7fb5092',
+                  address: '0x3a960d90b219ea4b9d3f5827ea6fba5bf40d391f' 
+           },
+           { 
+                  coinMark: 'SSP',
+                  privateKey: 'f8f766b246289f325e32cb28462096ade51f89b720dc6b064168baef2e6c9ac4',
+                  address: '0x8f5589faf64374788d1c8f3b1744bad1627ec565'
+           },
+           { 
+                  coinMark: 'Kcash',
+                  privateKey: '9bf8d4b890b391736cec94220d5d41d0c8a2b9555a5385316eecbeb89ce37d61',
+                  address: '0x910b0d94dd1f0f173f41e5ed0a2ddefeea6b4130' 
+          } 
+      ]
+
+
+
