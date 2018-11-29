@@ -206,7 +206,7 @@
 
 ### 1.生成Keystore
 
-生成keystore的只需要传入密码，将自动生成keystore
+生成keystore的只需要传入密码，将自动生成keystore,下面函数中只需要传入一个参数，那就密码。“123456”就是传入的密码。
 
       var testKeystore = require("../sdk/keystore/generateKeystore");
       var keystore = testKeystore.createKeystore("123456");
@@ -236,6 +236,8 @@
 
 
 ### 2.导出keystore
+
+exportKeystore是导出Keystore的函数，需要传入的参数是密码和路径，返回keystore的值
 
       var testKeystore = require("../sdk/keystore/generateKeystore");
 
