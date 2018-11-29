@@ -95,7 +95,7 @@ libKeystore.exportPrivateKey = function(keyObject, password) {
  * @returns {*}
  */
 libKeystore.importPrivateKey = function(privateKey ,password) {
-    if(!password || privateKey) {
+    if(!password || !privateKey) {
         return paramsErr;
     }
     var keystore = '';

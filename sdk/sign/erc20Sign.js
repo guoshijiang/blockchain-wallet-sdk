@@ -19,7 +19,7 @@ libErc29Sign.ethereumErc20CoinSign = function(privateKey, nonce, currentAccount,
         return paramsErr;
     }
     var transactionNonce = parseInt(nonce).toString(16);
-    var gasLimits = parseInt(90000).toString(16);
+    var gasLimits = parseInt(gasLimit).toString(16);
     var gasPrices = parseFloat(gasPrice).toString(16);
     var txboPrice = parseFloat(totalAmount*(10**decimal)).toString(16)
     var txData = {
