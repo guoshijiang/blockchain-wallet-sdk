@@ -520,3 +520,4 @@
       985be0d6fe5c08012542d96d96cf72eb89f7cf711667e5a06dd14c9c988b81eb7af5027514e20163
       67b89fd5bed9f619257ff3e816b9b62a' ] }
 
+致谢：bitcoinjs, ethereumjs
