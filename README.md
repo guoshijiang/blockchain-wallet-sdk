@@ -32,7 +32,7 @@
 
     かくとく　たもつ　けっせき　ちたい　こんわく　ぐっすり　しちょう　たいふう　まける　しほん　にんそう　てくび　さつまいも　ちつじょ　だいじょうぶ　ひっこし　てんらんかい　むかい
     
-*注：您要生成多少个助记词，您就传入数字几（目前支持：12,15,18,21,24）；后面一个传入相应的语言，目前可以传入的语言有：chinese_simplified（中文简体）；chinese_traditional（中文繁体）；english（英语）；french（法语）；italian（意大利语）；japanese（日语）；korean（韩语）；spanish（西班牙语）。
+*注：您要生成多少个助记词，您就传入数字几（目前支持：`12,15,18,21,24`）；后面一个传入相应的语言，目前可以传入的语言有：`chinese_simplified`（中文简体）；`chinese_traditional`（中文繁体）；`english`（英语）；`french`（法语）；`italian`（意大利语）；`japanese`（日语）；`korean`（韩语）；`spanish`（西班牙语）。
 
 ### 2.助记词编解码
 
@@ -202,5 +202,101 @@
           } 
       ]
 
+## 三.以太坊Keystore
 
+### 1.生成Keystore
+
+生成keystore的只需要传入密码，将自动生成keystore
+
+      var testKeystore = require("../sdk/keystore/generateKeystore");
+      var keystore = testKeystore.createKeystore("123456");
+      console.log(keystore);
+
+
+      { 
+            address: '531fe5d8be925ceba9bfce0c305d93fc6deb862b',
+            crypto:
+            { 
+                  cipher: 'aes-128-ctr',
+                  ciphertext: '3cf8ba317042815338f7397d80a53cf84cc7861c9ce70ed26fd23b2fdab9efc',
+                  cipherparams: { iv: '82c3b2d97f65ff974563bd14d5edaf4f' },
+                  mac: '67b2960dd73cd4f35d375a4c8c0898fc6f6cd9b7190dafb1c14aa724179a1e06',
+                  kdf: 'pbkdf2',
+                  kdfparams:
+                  { 
+                        c: 262144,
+                        dklen: 32,
+                        prf: 'hmac-sha256',
+                        salt: 'cb7a82cba06330ffe0ad2fea7124034d53f5db559e30e7752f9562dab8caa39c
+                   } 
+             },
+            id: 'a101bdc9-54d6-44a9-b787-587c92fbc680',
+            version: 3
+      }
+
+
+### 2.导出keystore
+
+      var testKeystore = require("../sdk/keystore/generateKeystore");
+
+      var keystore = testKeystore.createKeystore("123456");
+      console.log(keystore);
+      testKeystore.exportKeystore(keystore, "./");
+
+在你指定的目录下会生成相应的keystore文件
+
+      UTC--2018-11-29T07-30-06.805Z--2fecb0dd3718453b51d7f42db6e9c60b2c82cfa9
+
+### 3.导入keystore
+
+      var keystore = testKeystore.importKeystore("531fe5d8be925ceba9bfce0c305d93fc6deb862b", "./");
+      console.log(keystore);
+      
+      { 
+            address: '531fe5d8be925ceba9bfce0c305d93fc6deb862b',
+            crypto:
+            { 
+                  cipher: 'aes-128-ctr',
+                  ciphertext: '3cf8ba317042815338f7397d80a53cf84cc7861c9ce70ed26fd23b2fdab9efc',
+                  cipherparams: { iv: '82c3b2d97f65ff974563bd14d5edaf4f' },
+                  mac: '67b2960dd73cd4f35d375a4c8c0898fc6f6cd9b7190dafb1c14aa724179a1e06',
+                  kdf: 'pbkdf2',
+                  kdfparams:
+                  { 
+                        c: 262144,
+                        dklen: 32,
+                        prf: 'hmac-sha256',
+                        salt: 'cb7a82cba06330ffe0ad2fea7124034d53f5db559e30e7752f9562dab8caa39c
+                   } 
+             },
+            id: 'a101bdc9-54d6-44a9-b787-587c92fbc680',
+            version: 3
+      }
+      
+ ### 4.导出私钥
+ 
+      var privateKey = testKeystore.exportPrivateKey(keystore, "123456")
+      
+ ### 5.导入私钥
+ 
+       var keystore = testKeystore.importPrivateKey("qeeqeqqeqwweq", "123456");
+       console.log(keystore)
+       
+       { address: '805a06621171443bcf7d2bae9ac4c91539aef65f',
+        crypto:
+         { cipher: 'aes-128-ctr',
+           ciphertext: 'f7c0ce4b3c83b9927ce75cbceb',
+           cipherparams: { iv: '173ecf2cf4e34879175190a5a7b328cd' },
+           mac: 'd8b829e98383cbc8eb69f090e765c085e0882006489c74837aa4bff69b7b62bc',
+           kdf: 'pbkdf2',
+           kdfparams:
+            { c: 262144,
+              dklen: 32,
+              prf: 'hmac-sha256',
+              salt: '85766bde5af062f631d62d16842d079e8a0a52a0555bfd94ce3f1b3c28fa839b'
+       } },
+        id: '70860efe-84f0-43c9-9d68-3f8f0262203b',
+        version: 3 }
+
+## 四.数字货币签名
 
