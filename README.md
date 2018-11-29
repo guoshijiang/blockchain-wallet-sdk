@@ -300,3 +300,160 @@
 
 ## 四.数字货币签名
 
+### 1.比特币单笔转账签名
+
+      const testBtcSign = require('../sdk/sign/bitcoinSign');
+
+      var privateKey  = "L2CzLwNmNxVtV4RpgBMMRKPWhZmDeMofqxEqUjeRi8nQaVae5F51";
+      var amount = "100000";
+      var utxo = {
+          "unspent_outputs":[
+              {
+                  "tx_hash":"8ee886ba0c66ba2df2c0e3da3beee526996d9a5e6bbbdfea43e1a78340cb0128",
+                  "tx_hash_big_endian":"2801cb4083a7e143eadfbb6b5e9a6d9926e5ee3bdae3c0f22dba660cba86e88e",
+                  "tx_index":382253932,
+                  "tx_output_n": 0,
+                  "script":"76a914ca45c6eceea7aed14b6aea7e0ed466c6134f14bc88ac",
+                  "value": 1899000,
+                  "value_hex": "1cf9f8",
+                  "confirmations":2
+              }
+          ]
+      };
+      var sendFee = "100000";
+      var toAddress = "12zEJohMNqSZLXH1Msxpw41ykkk3rxgx1s";
+      var changeAddress = "12zEJohMNqSZLXH1Msxpw41ykkk3rxgx1s";
+
+      var signValue = testBtcSign.btcSingleSign(privateKey, amount, utxo.unspent_outputs, sendFee, toAddress, changeAddress);
+      console.log(signValue);
+
+结果如下：
+
+      01000000018ee886ba0c66ba2df2c0e3da3beee526996d9a5e6bbbdfea43e1a78340cb0128000000
+      006a473044022002d03fbb44d012733de62bd34047c22ef988bd3c79134be63565a1a0e031bfbe02
+      2067bddc7d9e5b70ff78abd2db2db499b3bd8ecb23b8bf9f7ecc670cc55b4d5818012103881a9743
+      d7bbb3e3f1ec534960b433cff5f883eec1f1c29dfdaf3aff43c1d0feffffffff02a0860100000000
+      001976a91415caf1976fc8334d4f2f071548d9cbace1a4517988acb8ec1900000000001976a91415
+      caf1976fc8334d4f2f071548d9cbace1a4517988ac00000000
+
+### 2.比特币多笔交易转账签名
+
+      const testBtcSign = require('../sdk/sign/bitcoinSign');
+
+      var sendInfo = {
+          "privateKey":"KwHEU8DTrY2ekGuqE6EqMMrcFj6Kdb6gWF4k8SpUeV7vDfc9c5Fn",
+          "changeAddress":"1KSX5wmrVax3LYaB4uKUxXzCRcv5SiLDq3",
+          "sendFee":1000,
+          "addressAmount":[
+              {
+                  "toAddress":"12zEJohMNqSZLXH1Msxpw41ykkk3rxgx1s",
+                  "amount":10
+              },{
+                  "toAddress":"1KSX5wmrVax3LYaB4uKUxXzCRcv5SiLDq3",
+                  "amount":10
+              },{
+                  "toAddress":"12zEJohMNqSZLXH1Msxpw41ykkk3rxgx1s",
+                  "amount":10
+              }
+          ]
+      }
+
+      var bitUtxo = {
+          "unspent_outputs":[
+              {
+                  "tx_hash":"8ee886ba0c66ba2df2c0e3da3beee526996d9a5e6bbbdfea43e1a78340cb0128",
+                  "tx_hash_big_endian":"2801cb4083a7e143eadfbb6b5e9a6d9926e5ee3bdae3c0f22dba660cba86e88e",
+                  "tx_index":382253932,
+                  "tx_output_n": 0,
+                  "script":"76a914ca45c6eceea7aed14b6aea7e0ed466c6134f14bc88ac",
+                  "value": 1899000,
+                  "value_hex": "1cf9f8",
+                  "confirmations":2
+              }
+          ]
+      };
+
+      var utxo = bitUtxo.unspent_outputs;
+      var signValue = testBtcSign.btcMultiSign(sendInfo, utxo);
+      console.log(signValue);
+
+结果：
+
+      01000000018ee886ba0c66ba2df2c0e3da3beee526996d9a5e6bbbdfea43e1a78340cb0128000000
+      006a47304402207bf66084ebbb91abc4fd4132b21a2d4d3b9c9d6535da1ff599ec0d323595ff2402
+      200965c6afd1d0b673f71761a0d53f6d6dcb6b194b1064226ef440c3d460b327ee01210202184157
+      40e8ae879fc6b6837e4ab6e8c44d452c62f7e0f7bceb37ae1b13e685ffffffff040a000000000000
+      001976a91415caf1976fc8334d4f2f071548d9cbace1a4517988ac0a000000000000001976a914ca
+      45c6eceea7aed14b6aea7e0ed466c6134f14bc88ac0a000000000000001976a91415caf1976fc833
+      4d4f2f071548d9cbace1a4517988acf2f51c00000000001976a914ca45c6eceea7aed14b6aea7e0e
+      d466c6134f14bc88ac00000000
+
+### 3.以太坊单笔转账签名
+
+      const testEthSign = require('../sdk/sign/ethereumSign');
+
+      var privateKey = "a2506976294fc506f6969e8f914ae9371804b104163f07e8d0e96794d5b43189";
+      var nonce = 78;
+      var toAddress = "0xe558be4e90b2ac96ae5cad47dc39cd08316f2e57";
+      var gasPrice = 9000000000;
+      var gasLimit = 120000;
+      var sendToBalance = 10;
+
+      var signValue = testEthSign.ethereumSign(privateKey, nonce, toAddress, sendToBalance, gasPrice, gasLimit);
+      console.log(signValue);
+
+结果：
+
+      0xf86d4e850218711a008301d4c094e558be4e90b2ac96ae5cad47dc39cd08316f2e57888ac72304
+      89e80000801ca03dcd39cc88ce022914de6b8ec66915d14fe3273f342b67692bea5e338ce3c2dfa0
+      16ecf3d329d4497baf538a36d7874ecc8aee7c537dca45e36fe0d7fc420da330
+
+### 4.以太坊批量转账签名
+
+      const testEthSign = require('../sdk/sign/ethereumSign');
+
+      var sendData =
+          {
+              "signMark":"ETH",
+              "privateKey":"a2506976294fc506f6969e8f914ae9371804b104163f07e8d0e96794d5b43189",
+              "gasPrice":12000000000,
+              "gasLimit":30000,
+              "nonce":63,
+              "signDta":[
+                  {
+                      "toAddress":"0xe558be4e90b2ac96ae5cad47dc39cd08316f2e57",
+                      "totalAmount":0.0001,
+                  },{
+                      "toAddress":"0x69204ab30fa18fb6b5b9677e639cdaf8a7e9b587",
+                      "totalAmount":0.0001,
+                  },{
+                      "toAddress":"0x79faca516a4eae381ab0baa50f99629ee59ead89",
+                      "totalAmount":0.0001,
+                  }
+              ]
+          }
+
+      var signValue = testEthSign.ethereumMultiSign(sendData);
+      console.log(signValue);
+
+结果：
+
+
+      { 
+            signCoin: 'ETH',
+            signDataArr:
+            [ 
+                '0xf86a3f8502cb41780082753094e558be4e90b2ac96ae5cad47dc39cd08316f2e57865af3107a4000801ca0520360d673c0988ad6771c702ebf360449a05f84cf97bb1feb60342e6dc50b81a078c4c3ab0026e49fa0ab3555888d26ca01813763a1c57e7f5ee2074790e4dee5',
+           '0xf86a408502cb4178008275309469204ab30fa18fb6b5b9677e639cdaf8a7e9b587865af3107a4000801ba05ccc441eac845e2bcdc2889ddcae025e4040159aea441a795bb4cf359c1a4e73a03afdeda4978b3b032ead801de3ac4e114ea5940f761230075dc5765bba146f13',
+            '0xf86a418502cb4178008275309479faca516a4eae381ab0baa50f99629ee59ead89865af3107a4000801ca04e586da8a2e8c8d606886572b82cefdf51402ad819f22aef52634e188b9355d6a0078214480d95f1a3a2cf62be2f0030c4c67cc9c598550ee0f174a1e22c244de9' 
+          ] 
+    }
+
+
+### 5.ERC20单笔转账签名
+
+
+
+
+### 4.ERC20批量转账签名
+
