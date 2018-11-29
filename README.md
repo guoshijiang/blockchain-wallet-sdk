@@ -306,7 +306,7 @@ exportKeystore是导出Keystore的函数，需要传入的参数是密码和路�
 
       const testBtcSign = require('../sdk/sign/bitcoinSign');
 
-      var privateKey  = "L2CzLwNmNxVtV4RpgBMMRKPWhZmDeMofqxEqUjeRi8nQaVae5F51";
+      var privateKey  = "";
       var amount = "100000";
       var utxo = {
           "unspent_outputs":[
@@ -343,7 +343,7 @@ exportKeystore是导出Keystore的函数，需要传入的参数是密码和路�
       const testBtcSign = require('../sdk/sign/bitcoinSign');
 
       var sendInfo = {
-          "privateKey":"KwHEU8DTrY2ekGuqE6EqMMrcFj6Kdb6gWF4k8SpUeV7vDfc9c5Fn",
+          "privateKey":"",
           "changeAddress":"1KSX5wmrVax3LYaB4uKUxXzCRcv5SiLDq3",
           "sendFee":1000,
           "addressAmount":[
@@ -394,7 +394,7 @@ exportKeystore是导出Keystore的函数，需要传入的参数是密码和路�
 
       const testEthSign = require('../sdk/sign/ethereumSign');
 
-      var privateKey = "a2506976294fc506f6969e8f914ae9371804b104163f07e8d0e96794d5b43189";
+      var privateKey = "";
       var nonce = 78;
       var toAddress = "0xe558be4e90b2ac96ae5cad47dc39cd08316f2e57";
       var gasPrice = 9000000000;
@@ -417,7 +417,7 @@ exportKeystore是导出Keystore的函数，需要传入的参数是密码和路�
       var sendData =
           {
               "signMark":"ETH",
-              "privateKey":"a2506976294fc506f6969e8f914ae9371804b104163f07e8d0e96794d5b43189",
+              "privateKey":"",
               "gasPrice":12000000000,
               "gasLimit":30000,
               "nonce":63,
@@ -456,7 +456,7 @@ exportKeystore是导出Keystore的函数，需要传入的参数是密码和路�
 
       const testERC20Sign = require('../sdk/sign/erc20Sign');
 
-      var privateKey = "a2506976294fc506f6969e8f914ae9371804b104163f07e8d0e96794d5b43189";
+      var privateKey = "";
       var nonce = 78;
       var currentAccount = "0xc6328b3a137b3be3f01c35ecda4ecda375be7fdf";
       var contractAddress = "0xfa3118b34522580c35ae27f6cf52da1dbb756288";
@@ -484,7 +484,7 @@ exportKeystore是导出Keystore的函数，需要传入的参数是密码和路�
       var sendErc20Data =
           {
               "signMark":"ERC20",
-              "privateKey":"a2506976294fc506f6969e8f914ae9371804b104163f07e8d0e96794d5b43189",
+              "privateKey":"",
               "contractAddress":"0xfa3118b34522580c35ae27f6cf52da1dbb756288",
               "currentAccount":"0xc6328b3a137b3be3f01c35ecda4ecda375be7fdf",
               "gasPrice":9000000000,
