@@ -452,8 +452,71 @@
 
 ### 5.ERC20单笔转账签名
 
+      const testERC20Sign = require('../sdk/sign/erc20Sign');
 
+      var privateKey = "a2506976294fc506f6969e8f914ae9371804b104163f07e8d0e96794d5b43189";
+      var nonce = 78;
+      var currentAccount = "0xc6328b3a137b3be3f01c35ecda4ecda375be7fdf";
+      var contractAddress = "0xfa3118b34522580c35ae27f6cf52da1dbb756288";
+      var toAddress = "0xe558be4e90b2ac96ae5cad47dc39cd08316f2e57";
+      var gasPrice = 9000000000;
+      var gasLimit = 120000;
+      var totalAmount = 10;
+      var decimal = 6;
 
+      var signValue = testERC20Sign.ethereumErc20CoinSign(privateKey, nonce, currentAccount, contractAddress, toAddress,  gasPrice,  gasLimit, totalAmount, decimal);
+      console.log(signValue);
+
+结果：
+
+      0xf8aa4e850218711a008301d4c094fa3118b34522580c35ae27f6cf52da1dbb75628880b844a905
+      9cbb000000000000000000000000e558be4e90b2ac96ae5cad47dc39cd08316f2e57000000000000
+      00000000000000000000000000000000000000000000009896801ba07d9cd29d2af124c00714d604
+      747c41dad42731d5c890dfade8217c6abba13899a064da50dce8079678a8eeaffb976957f1592332
+      682f888e8d106db93d362bee93
 
 ### 4.ERC20批量转账签名
+
+      const testERC20Sign = require('../sdk/sign/erc20Sign');
+
+      var sendErc20Data =
+          {
+              "signMark":"ERC20",
+              "privateKey":"a2506976294fc506f6969e8f914ae9371804b104163f07e8d0e96794d5b43189",
+              "contractAddress":"0xfa3118b34522580c35ae27f6cf52da1dbb756288",
+              "currentAccount":"0xc6328b3a137b3be3f01c35ecda4ecda375be7fdf",
+              "gasPrice":9000000000,
+              "gasLimit":90000,
+              "nonce":81,
+              "decimal":6,
+              "signDta":[
+                  {
+                      "toAddress":"0xe558be4e90b2ac96ae5cad47dc39cd08316f2e57",
+                      "totalAmount":10
+                  },{
+                      "toAddress":"0x69204ab30fa18fb6b5b9677e639cdaf8a7e9b587",
+                      "totalAmount":10
+                  }
+              ]
+          }
+
+
+      var signValue = testERC20Sign.MultiEthereumErc20CoinSign(sendErc20Data);
+      console.log(signValue);
+      
+结果：
+
+
+      { signCoin: 'ERC20',
+        signDataArr:
+         [ '0xf8aa51850218711a008301d4c094fa3118b34522580c35ae27f6cf52da1dbb75628880b8
+      44a9059cbb000000000000000000000000e558be4e90b2ac96ae5cad47dc39cd08316f2e57000000
+      00000000000000000000000000000000000000000000000000009896801ca0401192d543095f6b46
+      08cfb64c682edb8598bdc10b8108c4229f774272ef1cdfa02f8ad180dcd8c5e99b45155444c72081
+      fb2d101c42e73aa5ac4dc38778f671b2',
+           '0xf8aa52850218711a008301d4c094fa3118b34522580c35ae27f6cf52da1dbb75628880b8
+      44a9059cbb00000000000000000000000069204ab30fa18fb6b5b9677e639cdaf8a7e9b587000000
+      00000000000000000000000000000000000000000000000000009896801ca0cf346f3a99a56adb66
+      985be0d6fe5c08012542d96d96cf72eb89f7cf711667e5a06dd14c9c988b81eb7af5027514e20163
+      67b89fd5bed9f619257ff3e816b9b62a' ] }
 
