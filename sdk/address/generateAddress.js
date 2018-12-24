@@ -5,13 +5,9 @@ const NETWORKS = require('bitcoinjs-lib/src/networks');
 const hdkey = require('ethereumjs-wallet/hdkey');
 const util = require('ethereumjs-util');
 const bip32  = require( 'bip32');
+const constant = require('../constant');
 
 var libGenerateAddress = {};
-
-const paramsErr = {code:1000, message:"input params is null"};
-const inputParamErr = {code:1001, message:"input receiveOrChange param is error, you must input 0 or 1"};
-const childKeyErr = {code:1002, message:"input param childKey is null"};
-const unknownType = {code:1003, message:"unknown type,please input once again"};
 
 /**
  * @param childKey
@@ -20,7 +16,7 @@ const unknownType = {code:1003, message:"unknown type,please input once again"};
 function getAddress (childKey) {
     if(!childKey){
        console.log("input param childKey is null");
-       return childKeyErr;
+       return constant.childKeyErr;
     }
     return baddress.toBase58Check(bcrypto.hash160(childKey.publicKey), NETWORKS.bitcoin.pubKeyHash)
 }
@@ -34,7 +30,7 @@ function getAddress (childKey) {
 function bitcoinAddress(seed, receiveOrChange, number) {
     if(!seed || !receiveOrChange || !number) {
         console.log("input params seed, receiveOrChange and number is null");
-        return paramsErr;
+        return constant.paramsErr;
     }
     var rootMasterKey = bip32.fromSeed(seed);
     if(receiveOrChange === '0') {
@@ -43,7 +39,7 @@ function bitcoinAddress(seed, receiveOrChange, number) {
         var childKey = rootMasterKey.derivePath("m/44'/0'/0'/1/" + number + "")
     } else {
         console.log("input receiveOrChange param is error, you must input 0 or 1");
-        return inputParamErr;
+        return constant.inputParamErr;
     }
     var btcData = {coinMark:"BTC", privateKey:childKey.toWIF().toString('hex'), address:getAddress(childKey)};
     return btcData;
@@ -57,7 +53,7 @@ function bitcoinAddress(seed, receiveOrChange, number) {
 function ethreumAddress(seed, number) {
     if(!seed || !number) {
         console.log("input param seed and number is null")
-        return paramsErr;
+        return constant.paramsErr;
     }
     var rootMasterKey = hdkey.fromMasterSeed(seed);
     var childKey = rootMasterKey.derivePath("m/44'/60'/0'/0/" +  number + "");
@@ -77,7 +73,7 @@ function ethreumAddress(seed, number) {
 function erc20Address(seed, bipNumber, number, coinMark) {
     if(!seed || !number) {
         console.log("input param seed, coinNumber and number is null")
-        return paramsErr;
+        return constant.paramsErr;
     }
     var rootMasterKey = hdkey.fromMasterSeed(seed);
     var childKey = rootMasterKey.derivePath("m/44'/" + bipNumber + "'/0'/0/" +  number + "");
@@ -94,7 +90,7 @@ function erc20Address(seed, bipNumber, number, coinMark) {
 libGenerateAddress.blockchainAddress = function (addressParmas) {
     if(!addressParmas) {
         console.log("input param addressParmas is null")
-        return paramsErr;
+        return constant.paramsErr;
     }
     switch (addressParmas.coinType) {
         case 'BTC':
@@ -103,9 +99,11 @@ libGenerateAddress.blockchainAddress = function (addressParmas) {
             return ethreumAddress(addressParmas.seed, addressParmas.number);
         case 'ERC20':
             return erc20Address(addressParmas.seed, addressParmas.bipNumber, addressParmas.number, addressParmas.coinMark);
+        case 'OMNI':
+            return bitcoinAddress(addressParmas.seed, addressParmas.receiveOrChange, addressParmas.number);
         default:
             console.log("unknown type");
-            return unknownType;
+            return constant.unknownType;
     }
 };
 
@@ -116,7 +114,7 @@ libGenerateAddress.blockchainAddress = function (addressParmas) {
 libGenerateAddress.multiERC20AddressGenerate = function(ERC20AddressParam) {
     if(!ERC20AddressParam) {
         console.log("input param ERC20AddressParam is null");
-        return paramsErr;
+        return constant.paramsErr;
     }
     var outData = [];
     for(var i = 0; i < ERC20AddressParam.erc20.length; i++) {

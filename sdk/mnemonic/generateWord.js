@@ -1,12 +1,8 @@
 const bip39  = require('bip39');
 const bip32  = require( 'bip32');
+const constant = require('../constant');
 
 var libGenerateHelpWord = {};
-
-
-const paramsErr = {code:1000, message:"input params is null"};
-const noWord = {code:1001, message:"don't support this case"};
-const noSupport = {code:1002, message:"Temporarily does not support the situation you want"}
 
 /**
  * @param number: the number of mnemonic
@@ -15,7 +11,7 @@ const noSupport = {code:1002, message:"Temporarily does not support the situatio
 libGenerateHelpWord.createHelpWord = function (number, language) {
     if(!number || !language) {
         console.log("params number and language is null");
-        return paramsErr;
+        return constant.paramsErr;
     }
     switch (language) {
         case 'chinese_simplified':
@@ -31,7 +27,7 @@ libGenerateHelpWord.createHelpWord = function (number, language) {
                 return bip39.generateMnemonic(256, null, bip39.wordlists.chinese_simplified);
             } else {
                 console.log("don't support this case")
-                return noWord;
+                return constant.noWord;
             }
         case 'chinese_traditional':
             if(number === 12) {
@@ -46,7 +42,7 @@ libGenerateHelpWord.createHelpWord = function (number, language) {
                 return bip39.generateMnemonic(256, null, bip39.wordlists.chinese_traditional);
             } else {
                 console.log("don't support this case")
-                return noWord;
+                return constant.noWord;
             }
         case 'english':
             if(number === 12) {
@@ -61,7 +57,7 @@ libGenerateHelpWord.createHelpWord = function (number, language) {
                 return bip39.generateMnemonic(256, null, bip39.wordlists.english);
             } else {
                 console.log("don't support this case")
-                return noWord;
+                return constant.noWord;
             }
         case 'french':
             if(number === 12) {
@@ -76,7 +72,7 @@ libGenerateHelpWord.createHelpWord = function (number, language) {
                 return bip39.generateMnemonic(256, null, bip39.wordlists.french);
             } else {
                 console.log("don't support this case")
-                return noWord;
+                return constant.noWord;
             }
         case 'italian':
             if(number === 12) {
@@ -91,7 +87,7 @@ libGenerateHelpWord.createHelpWord = function (number, language) {
                 return bip39.generateMnemonic(256, null, bip39.wordlists.italian);
             } else {
                 console.log("don't support this case")
-                return noWord;
+                return constant.noWord;
             }
         case 'japanese':
             if(number === 12) {
@@ -106,7 +102,7 @@ libGenerateHelpWord.createHelpWord = function (number, language) {
                 return bip39.generateMnemonic(256, null, bip39.wordlists.japanese);
             } else {
                 console.log("don't support this case")
-                return noWord;
+                return constant.noWord;
             }
         case 'korean':
             if(number === 12) {
@@ -121,7 +117,7 @@ libGenerateHelpWord.createHelpWord = function (number, language) {
                 return bip39.generateMnemonic(256, null, bip39.wordlists.korean);
             } else {
                 console.log("don't support this case")
-                return noWord;
+                return constant.noWord;
             }
         case 'spanish':
             if(number === 12) {
@@ -136,18 +132,18 @@ libGenerateHelpWord.createHelpWord = function (number, language) {
                 return bip39.generateMnemonic(256, null, bip39.wordlists.spanish);
             } else {
                 console.log("don't support this case")
-                return noWord;
+                return constant.noWord;
             }
         default:
             console.log("Temporarily does not support the situation you want");
-            return noSupport;
+            return constant.noSupport;
     }
 };
 
 libGenerateHelpWord.wordsToEntropy = function(mnemonic, language) {
     if(!mnemonic || !language) {
         console.log("param mnemonic and language is null");
-        return paramsErr;
+        return constant.paramsErr;;
     }
     switch (language) {
         case 'chinese_simplified':
@@ -168,14 +164,14 @@ libGenerateHelpWord.wordsToEntropy = function(mnemonic, language) {
             return bip39.mnemonicToEntropy(mnemonic, bip39.wordlists.spanish);
         default:
             console.log("Temporarily does not support the situation you want");
-            return noSupport;
+            return constant.noSupport;
     }
 };
 
 libGenerateHelpWord.entropyToWords = function(encrytMnemonic, language) {
     if(!encrytMnemonic || !language) {
         console.log("param encrytMnemonic and language is null");
-        return paramsErr;
+        return constant.paramsErr;;
     }
     switch (language) {
         case 'chinese_simplified':
@@ -196,14 +192,14 @@ libGenerateHelpWord.entropyToWords = function(encrytMnemonic, language) {
             return bip39.entropyToMnemonic(encrytMnemonic, bip39.wordlists.spanish);
         default:
             console.log("Temporarily does not support the situation you want");
-            return noSupport;
+            return constant.noSupport;
     }
 };
 
 libGenerateHelpWord.mnemonicToSeed = function(mnemonic, password){
     if(!mnemonic ) {
         console.log("param mnemonic and password is null");
-        return paramsErr;
+        return constant.paramsErr;;
     }
     return bip39.mnemonicToSeed(mnemonic, password)
 };
@@ -211,7 +207,7 @@ libGenerateHelpWord.mnemonicToSeed = function(mnemonic, password){
 libGenerateHelpWord.mnemonicToSeedHex = function(mnemonic, password){
     if(!mnemonic || !password) {
         console.log("param mnemonic and password is null");
-        return paramsErr;
+        return constant.paramsErr;;
     }
     return bip39.mnemonicToSeedHex(mnemonic, password);
 };
@@ -219,7 +215,7 @@ libGenerateHelpWord.mnemonicToSeedHex = function(mnemonic, password){
 libGenerateHelpWord.validateMnemonic = function (mnemonic, language) {
     if(!mnemonic || !language) {
         console.log("param mnemonic and language is null");
-        return paramsErr;
+        return constant.paramsErr;;
     }
     switch (language) {
         case 'chinese_simplified':
@@ -240,7 +236,7 @@ libGenerateHelpWord.validateMnemonic = function (mnemonic, language) {
             return bip39.validateMnemonic(mnemonic, bip39.wordlists.spanish);
         default:
             console.log("Temporarily does not support the situation you want");
-            return noSupport;
+            return constant.noSupport;
     }
 };
 

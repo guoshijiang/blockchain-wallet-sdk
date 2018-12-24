@@ -1,8 +1,7 @@
 const bitcoin = require('bitcoinjs-lib');
+const constant = require('../constant');
 
 var ligBitcoinSign = {};
-
-const paramsErr = {code:1000, message:"input params is null"};
 
 /**
  * @param privateKey
@@ -16,7 +15,7 @@ const paramsErr = {code:1000, message:"input params is null"};
 ligBitcoinSign.btcSingleSign = function (privateKey, amount, utxo, sendFee, toAddress, changeAddress) {
     if(!privateKey || !amount || !utxo || !sendFee || !toAddress || !changeAddress ) {
         console.log("one of privateKey, amount, utxo, sendFee, toAddress and changeAddress is null, please give a valid param");
-        return paramsErr;
+        return constant.paramsErr;
     } else {
         var set = bitcoin.ECPair.fromWIF(privateKey);
         var txb = new bitcoin.TransactionBuilder();
@@ -31,8 +30,8 @@ ligBitcoinSign.btcSingleSign = function (privateKey, amount, utxo, sendFee, toAd
         }
         txb.addOutput(toAddress, sendAmount - fee);
         txb.addOutput(changeAddress, totalMoney - sendAmount);
-        for(var i=0;i<utxo.length;i++){
-            txb.sign(0, set);
+        for(var i = 0; i < utxo.length; i++){
+            txb.sign(i, set);
         }
     }
     return txb.buildIncomplete().toHex();
@@ -46,14 +45,15 @@ ligBitcoinSign.btcSingleSign = function (privateKey, amount, utxo, sendFee, toAd
 ligBitcoinSign.btcMultiSign = function(sendInfo, utxo) {
     if( !utxo || !sendInfo ) {
         console.log("one of sendInfo or utxo, is null, please give a valid param");
-        return paramsErr;
+        return constant.paramsErr;
     } else {
+        console.log("param is valid, start sign transaction");
         var set = bitcoin.ECPair.fromWIF(sendInfo.privateKey);
         var txb = new bitcoin.TransactionBuilder();
         var sendAmount = 0;
         txb.setVersion(1);
         var totalMoney = 0;
-        for(var i=0; i< utxo.length; i++){
+        for(var i=0; i<utxo.length; i++){
             txb.addInput(utxo[i].tx_hash_big_endian, utxo[i].tx_output_n);
             totalMoney += utxo[i].value;
         }
@@ -63,8 +63,8 @@ ligBitcoinSign.btcMultiSign = function(sendInfo, utxo) {
             sendAmount = sendAmount +  parseFloat(sendInfo.addressAmount[j].amount);
         }
         txb.addOutput(sendInfo.changeAddress, totalMoney - (sendAmount + parseFloat(sendInfo.sendFee)));
-        for(var i=0;i<utxo.length;i++){
-            txb.sign(0, set);
+        for(var i=0; i< utxo.length;i++){
+            txb.sign(i, set);
         }
     }
     return txb.buildIncomplete().toHex();

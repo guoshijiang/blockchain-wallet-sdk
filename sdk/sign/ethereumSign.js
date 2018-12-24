@@ -1,11 +1,9 @@
 const util = require('ethereumjs-util');
 const transaction = require('ethereumjs-tx');
 const Web3 = require('web3');
+const constant = require('../constant');
 
 var libEthereumSign = {};
-
-const paramsErr = {code:1000, message:"input params is null"};
-var serializedErr = {code:400, message:"Serialized transaction fail"};
 
 if (typeof web3 !== 'undefined') {
     var web3 = new Web3(web3.currentProvider);
@@ -25,7 +23,7 @@ if (typeof web3 !== 'undefined') {
 libEthereumSign.ethereumSign = function (privateKey, nonce, toAddress, sendToBalance, gasPrice, gasLimit) {
     if(!privateKey || !nonce || !toAddress || !sendToBalance || !gasPrice || !gasLimit) {
         console.log("one of fromAddress, toAddress, sendToBalance, sendFee is null, please give a valid param");
-        return paramsErr;
+        return constant.paramsErr;
     } else {
         var transactionNonce = parseInt(nonce).toString(16);
         var numBalance = parseFloat(sendToBalance);
@@ -45,12 +43,12 @@ libEthereumSign.ethereumSign = function (privateKey, nonce, toAddress, sendToBal
         tx.sign(privateKeyBuffer);
         var serializedTx = tx.serialize();
         if(serializedTx == null) {
-            return serializedErr;
+            return constant.serializedErr;
         } else {
             if (tx.verifySignature()) {
                 console.log('Signature Checks out!');
             } else {
-                return serializedErr;
+                return constant.serializedErr;
             }
         }
     }
@@ -58,29 +56,29 @@ libEthereumSign.ethereumSign = function (privateKey, nonce, toAddress, sendToBal
 };
 
 /**
- * @param sendData
+ * @param sendInfo
  * @returns {*}
  */
-libEthereumSign.ethereumMultiSign = function (sendData) {
-    if(sendData == null) {
-        console.log("param is invalid, sendData is null");
-        return paramsErr;
+libEthereumSign.ethereumMultiSign = function (sendInfo) {
+    if(sendInfo == null) {
+        console.log("param is invalid, sendInfo is null");
+        return constant.paramsErr;
     }
-    var calcNonce = Number(sendData.nonce);
-    var arrData = sendData.signDta;
+    var calcNonce = Number(sendInfo.nonce);
+    var arrData = sendInfo.addressAmount;
     var outArr = [];
     for(var i = 0; i < arrData.length; i++){
         var transactionNonce = parseInt(calcNonce).toString(16);
-        var balancetoWei = web3.toWei(parseFloat(sendData.signDta[i].totalAmount), "ether");
+        var balancetoWei = web3.toWei(parseFloat(sendInfo.addressAmount[i].amount), "ether");
         var balanceValue = parseInt(balancetoWei).toString(16);
-        var oxGas = parseInt(sendData.gasLimit).toString(16);
-        var oxGasPrice = parseInt(sendData.gasPrice).toString(16);
-        var privateKeyBuffer =  Buffer.from(sendData.privateKey, 'hex');
+        var oxGas = parseInt(sendInfo.gasLimit).toString(16);
+        var oxGasPrice = parseInt(sendInfo.gasPrice).toString(16);
+        var privateKeyBuffer =  Buffer.from(sendInfo.privateKey, 'hex');
         var rawTx = {
             nonce:'0x' + transactionNonce,
             gasPrice: '0x' + oxGasPrice,
             gas:'0x' + oxGas,
-            to: sendData.signDta[i].toAddress,
+            to: sendInfo.addressAmount[i].toAddress,
             value:'0x' + balanceValue
         };
         var tx = new transaction(rawTx);
