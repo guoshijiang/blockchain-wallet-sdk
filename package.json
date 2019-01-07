@@ -1,7 +1,7 @@
 {
   "name": "blockchain-wallet-sdk",
-  "version": "1.0.0",
-  "description": "This is lib for famous public chain to create their wallet",
+  "version": "1.0.2",
+  "description": "This is a blockchain wallet sdk which is for famous mainchain to create wallet",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

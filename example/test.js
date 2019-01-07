@@ -57,7 +57,7 @@ var utxo ={
 
 var signParams = {
     "signMark":"OMNI",
-    "privateKey":"KwHEU8DTrY2ekGuqE6EqMMrcFj6Kdb6gWF4k8SpUeV7vDfc9c5Fn",
+    "privateKey":"私钥",
     "contractAddress":"0xfa3118b34522580c35ae27f6cf52da1dbb756288",
     "fromAddress":"12zEJohMNqSZLXH1Msxpw41ykkk3rxgx1s",
     "changeAddress":"1KSX5wmrVax3LYaB4uKUxXzCRcv5SiLDq3",

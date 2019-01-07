@@ -9,7 +9,7 @@ var libGenerateHelpWord = {};
  * @param language: mnemonic language
  */
 libGenerateHelpWord.createHelpWord = function (number, language) {
-    if(!number || !language) {
+    if(!number && !language) {
         console.log("params number and language is null");
         return constant.paramsErr;
     }
@@ -141,7 +141,7 @@ libGenerateHelpWord.createHelpWord = function (number, language) {
 };
 
 libGenerateHelpWord.wordsToEntropy = function(mnemonic, language) {
-    if(!mnemonic || !language) {
+    if(!mnemonic && !language) {
         console.log("param mnemonic and language is null");
         return constant.paramsErr;;
     }
@@ -169,7 +169,7 @@ libGenerateHelpWord.wordsToEntropy = function(mnemonic, language) {
 };
 
 libGenerateHelpWord.entropyToWords = function(encrytMnemonic, language) {
-    if(!encrytMnemonic || !language) {
+    if(!encrytMnemonic && !language) {
         console.log("param encrytMnemonic and language is null");
         return constant.paramsErr;;
     }
@@ -205,7 +205,7 @@ libGenerateHelpWord.mnemonicToSeed = function(mnemonic, password){
 };
 
 libGenerateHelpWord.mnemonicToSeedHex = function(mnemonic, password){
-    if(!mnemonic || !password) {
+    if(!mnemonic && !password) {
         console.log("param mnemonic and password is null");
         return constant.paramsErr;;
     }
@@ -213,7 +213,7 @@ libGenerateHelpWord.mnemonicToSeedHex = function(mnemonic, password){
 };
 
 libGenerateHelpWord.validateMnemonic = function (mnemonic, language) {
-    if(!mnemonic || !language) {
+    if(!mnemonic && !language) {
         console.log("param mnemonic and language is null");
         return constant.paramsErr;;
     }

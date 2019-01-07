@@ -21,7 +21,7 @@ if (typeof web3 !== 'undefined') {
  * @returns {*}
  */
 libEthereumSign.ethereumSign = function (privateKey, nonce, toAddress, sendToBalance, gasPrice, gasLimit) {
-    if(!privateKey || !nonce || !toAddress || !sendToBalance || !gasPrice || !gasLimit) {
+    if(!privateKey && !nonce && !toAddress && !sendToBalance && !gasPrice && !gasLimit) {
         console.log("one of fromAddress, toAddress, sendToBalance, sendFee is null, please give a valid param");
         return constant.paramsErr;
     } else {

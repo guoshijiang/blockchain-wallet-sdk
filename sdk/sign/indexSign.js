@@ -17,7 +17,7 @@ libIndexSign.blockchainWalletSign = function (signParams) {
     }
     switch (signParams.signMark) {
         case 'BTC':
-            if (signParams.privateKey || signParams.changeAddress ||  signParams.sendFee || signParams.addressAmount || signParams.utxo) {
+            if (signParams.privateKey && signParams.changeAddress && signParams.sendFee && signParams.addressAmount && signParams.utxo) {
                 var sendInfo = {
                     privateKey:signParams.privateKey,
                     changeAddress:signParams.changeAddress,
@@ -31,7 +31,7 @@ libIndexSign.blockchainWalletSign = function (signParams) {
                 return constant.BitCoinSignFail;
             }
         case 'ETH':
-            if(signParams.privateKey || signParams.gasPrice || signParams.gasLimit || signParams.nonce || signParams.addressAmount){
+            if(signParams.privateKey && signParams.gasPrice && signParams.gasLimit && signParams.nonce && signParams.addressAmount){
                 var sendInfo = {
                     privateKey:signParams.privateKey,
                     gasPrice:signParams.gasPrice,
@@ -45,7 +45,7 @@ libIndexSign.blockchainWalletSign = function (signParams) {
                 return constant.EthSignFail;
             }
         case 'ERC20':
-            if(signParams.privateKey || signParams.contractAddress || signParams.fromAddress || signParams.gasPrice || signParams.gasLimit || signParams.nonce || signParams.decimal || signParams.addressAmount) {
+            if(signParams.privateKey && signParams.contractAddress && signParams.fromAddress && signParams.gasPrice && signParams.gasLimit && signParams.nonce && signParams.decimal && signParams.addressAmount) {
                 var sendInfo = {
                     privateKey:signParams.privateKey,
                     contractAddress:signParams.contractAddress,
@@ -62,7 +62,7 @@ libIndexSign.blockchainWalletSign = function (signParams) {
                 return constant.Erc20SignFail;
             }
         case 'OMNI':
-            if(signParams.privateKey || signParams.changeAddress ||  signParams.sendFee || signParams.addressAmount || signParams.utxo) {
+            if(signParams.privateKey && signParams.changeAddress &&  signParams.sendFee && signParams.addressAmount && signParams.utxo) {
                 var sendInfo = {
                     privateKey:signParams.privateKey,
                     utxo:signParams.utxo,
@@ -70,7 +70,7 @@ libIndexSign.blockchainWalletSign = function (signParams) {
                     feeValue:signParams.sendFee,
                     addressAmount:signParams.addressAmount
                 };
-                return omniSign.usdtBatchSign(sendInfo);
+                return omniSign.usdtSign(privateKey, utxo, feeValue, addressAmount[0].amount, fromAddress, addressAmount[0].toAddress);
             } else {
                 console.log("omni sign fail, please check it");
                 return constant.OmniSignFail;

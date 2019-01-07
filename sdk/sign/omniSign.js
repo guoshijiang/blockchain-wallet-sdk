@@ -75,13 +75,45 @@ libUsdtSign.usdtBatchSign = function (sendInfo) {
        console.log("input params is null");
        return constant.paramsErr;
    }
-   var outArr = [];
-   for (var i = 0; i < sendInfo.addressAmount.length; i++) {
-       var sign = libUsdtSign.usdtSign(sendInfo.privateKey, sendInfo.utxo, sendInfo.feeValue,  sendInfo.addressAmount[i].amount, sendInfo.fromAddress, sendInfo.addressAmount[i].toAddress);
-       outArr = outArr.concat(sign);
-   }
-   return { signCoin:"OMNI", signDataArr:outArr}
+   const fundValue = 546;
+   var totalUnspent = 0;
+   var txb = new bitcoin.TransactionBuilder();
+   var set = bitcoin.ECPair.fromWIF(sendInfo.privateKey);
+    for(var i = 0; i < sendInfo.utxo.length; i++){
+        totalUnspent = totalUnspent + sendInfo.utxo[i].value;
+    }
+    var changeValue = totalUnspent - fundValue - (sendInfo.feeValue*1e8);
+    if (totalUnspent < sendInfo.feeValue + fundValue) {
+        console.log("Total less than fee");
+        return constant.LessValue;
+    }
+    for(var i = 0; i< sendInfo.utxo.length; i++){
+        txb.addInput(sendInfo.utxo[i].tx_hash_big_endian, sendInfo.utxo[i].tx_output_n, 0xfffffffe);
+    }
+    for(var i = 0; i < sendInfo.addressAmount.length; i++) {
+        var usdtAmount = parseInt(sendInfo.addressAmount[i].amount*1e8).toString(16);
+        const usdtInfo = [
+            "6f6d6e69",
+            "0000",
+            "00000000001f",
+            addPreZero(usdtAmount)
+        ].join('');
+        const data = Buffer.from(usdtInfo, "hex");
+        const omniOutput = bitcoin.script.compile([
+            bitcoin.opcodes.OP_RETURN,
+            data
+        ]);
+        txb.addOutput(sendInfo.addressAmount[i].toAddress, fundValue);
+        txb.addOutput(omniOutput, 0);
+    }
+    txb.addOutput( sendInfo.fromAddress, changeValue);
+    for(var i = 0;i < sendInfo.utxo.length; i++){
+        txb.sign(i, set);
+    }
+    return txb.buildIncomplete().toHex();
 };
 
 module.exports = libUsdtSign;
+
+
 

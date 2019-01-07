@@ -69,7 +69,7 @@ libKeystore.exportKeystore = function(keyObject, path) {
  * @returns {*}
  */
 libKeystore.importKeystore = function(address, datadir) {
-    if(!address || !datadir) {
+    if(!address && !datadir) {
         return constant.paramsErr;
     }
     return keythereum.importFromFile(address, datadir);
@@ -81,7 +81,7 @@ libKeystore.importKeystore = function(address, datadir) {
  * @returns {*}
  */
 libKeystore.exportPrivateKey = function(keyObject, password) {
-    if(!keyObject || !password) {
+    if(!keyObject && !password) {
         return constant.paramsErr;
     }
     return keythereum.recover(password, keyObject);
@@ -93,7 +93,7 @@ libKeystore.exportPrivateKey = function(keyObject, password) {
  * @returns {*}
  */
 libKeystore.importPrivateKey = function(privateKey ,password) {
-    if(!password || !privateKey) {
+    if(!password && !privateKey) {
         return constant.paramsErr;
     }
     var keystore = '';

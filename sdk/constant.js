@@ -1,4 +1,3 @@
-
 const libConstVar = {};
 
 libConstVar.paramsErr = {code:1000, message:"input params is null"};
@@ -17,6 +16,5 @@ libConstVar.BitCoinSignFail = {code:1012, message:"bitcoin sign fail, please che
 libConstVar.EthSignFail = {code:1013, message:"eth sign fail, please check it"};
 libConstVar.Erc20SignFail = {code:1014, message:"erc20 sign fail, please check it"};
 libConstVar.OmniSignFail = {code:1015, message:"omni sign fail, please check it"};
-
 
 module.exports = libConstVar;

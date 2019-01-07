@@ -28,7 +28,7 @@ function getAddress (childKey) {
  * @returns {*}
  */
 function bitcoinAddress(seed, receiveOrChange, number) {
-    if(!seed || !receiveOrChange || !number) {
+    if(!seed && !receiveOrChange && !number) {
         console.log("input params seed, receiveOrChange and number is null");
         return constant.paramsErr;
     }
@@ -51,7 +51,7 @@ function bitcoinAddress(seed, receiveOrChange, number) {
  * @returns {*}
  */
 function ethreumAddress(seed, number) {
-    if(!seed || !number) {
+    if(!seed && !number) {
         console.log("input param seed and number is null")
         return constant.paramsErr;
     }
@@ -71,7 +71,7 @@ function ethreumAddress(seed, number) {
  * @returns {*}
  */
 function erc20Address(seed, bipNumber, number, coinMark) {
-    if(!seed || !number) {
+    if(!seed && !number) {
         console.log("input param seed, coinNumber and number is null")
         return constant.paramsErr;
     }

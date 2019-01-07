@@ -13,7 +13,7 @@ var ligBitcoinSign = {};
  * @returns {*}
  */
 ligBitcoinSign.btcSingleSign = function (privateKey, amount, utxo, sendFee, toAddress, changeAddress) {
-    if(!privateKey || !amount || !utxo || !sendFee || !toAddress || !changeAddress ) {
+    if(!privateKey && !amount && !utxo && !sendFee && !toAddress && !changeAddress ) {
         console.log("one of privateKey, amount, utxo, sendFee, toAddress and changeAddress is null, please give a valid param");
         return constant.paramsErr;
     } else {
@@ -43,7 +43,7 @@ ligBitcoinSign.btcSingleSign = function (privateKey, amount, utxo, sendFee, toAd
  * @returns {*}
  */
 ligBitcoinSign.btcMultiSign = function(sendInfo, utxo) {
-    if( !utxo || !sendInfo ) {
+    if( !utxo && !sendInfo ) {
         console.log("one of sendInfo or utxo, is null, please give a valid param");
         return constant.paramsErr;
     } else {

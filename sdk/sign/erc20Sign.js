@@ -13,7 +13,7 @@ function addPreZero(num){
 }
 
 libErc29Sign.ethereumErc20CoinSign = function(privateKey, nonce, currentAccount,  contractAddress, toAddress,  gasPrice,  gasLimit, totalAmount , decimal) {
-    if(!privateKey || !nonce || !currentAccount || !contractAddress || !toAddress  || !gasPrice || !gasLimit || !totalAmount || !decimal) {
+    if(!privateKey && !nonce && !currentAccount && !contractAddress && !toAddress  && !gasPrice && !gasLimit && !totalAmount && !decimal) {
         console.log("one of param is null, please give a valid param");
         return constant.paramsErr;
     }
