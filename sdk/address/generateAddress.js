@@ -6,6 +6,9 @@ const hdkey = require('ethereumjs-wallet/hdkey');
 const util = require('ethereumjs-util');
 const bip32  = require( 'bip32');
 const constant = require('../constant');
+const irisnet = require('irisnet-crypto');
+const RippleAPI = require('ripple-lib').RippleAPI;
+const api = new RippleAPI();
 
 var libGenerateAddress = {};
 
@@ -83,6 +86,28 @@ function erc20Address(seed, bipNumber, number, coinMark) {
     return erc20Data;
 }
 
+function cosmosAddress(coinType){
+    if(!coinType) {
+        console.log("input param seed and number is null")
+        return constant.paramsErr;
+    }
+    let crypto = irisnet.getCrypto(coinType);
+    let account = crypto.create('english');
+    return account;
+}
+
+function xrpAddress (coinType) {
+    if(!coinType) {
+        console.log("input param seed and number is null")
+        return constant.paramsErr;
+    }
+    const RipAccount = api.generateAddress();
+    let address = RipAccount.address;
+    let secret = RipAccount.secret;
+    let xrpData = {address:address, secret:secret};
+    return xrpData
+}
+
 /**
  * @param addressParmas
  * @returns {*}
@@ -101,6 +126,12 @@ libGenerateAddress.blockchainAddress = function (addressParmas) {
             return erc20Address(addressParmas.seed, addressParmas.bipNumber, addressParmas.number, addressParmas.coinMark);
         case 'OMNI':
             return bitcoinAddress(addressParmas.seed, addressParmas.receiveOrChange, addressParmas.number);
+        case 'COSMOS':
+            return cosmosAddress('cosmos');
+        case 'IRIS':
+            return cosmosAddress('iris');
+        case 'XRP':
+            return xrpAddress('xrp');
         default:
             console.log("unknown type");
             return constant.unknownType;
